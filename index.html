@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Mercado Fácil</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --card-bg: #1e1e1e;
+      --input-bg: #2d2d2d;
+      --text: #ffffff;
+      --text-muted: #b0b0b0;
+      --primary: #4caf50;
+      --border: #333333;
+      --danger: #ef5350;
+      --accent: #64b5f6;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      max-width: 600px;
+      margin: 15px auto;
+      padding: 0 15px;
+      font-size: 18px;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    /* SEÇÃO 1: FORMULÁRIO DE PLANEJAMENTO */
+    .section-box {
+      background: var(--card-bg);
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .title-plan { color: var(--accent); }
+    .title-shop { color: var(--primary); }
+    .title-finish { color: #ffca28; }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .input-wrapper label {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="number"] {
+      background-color: var(--input-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    button {
+      border: none;
+      padding: 14px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-add {
+      background-color: #2196f3;
+      color: #fff;
+    }
+
+    /* SEÇÃO 2: ABAS DE MODO DE VISÃO */
+    .tabs-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .tabs-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background-color: var(--card-bg);
+      color: var(--text-muted);
+      border: 2px solid var(--border);
+      padding: 12px 6px;
+      font-size: 15px;
+      border-radius: 6px;
+    }
+
+    .tab-btn.active {
+      background-color: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* LISTA DE PRODUTOS */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    li.comprado {
+      border-color: #2e7d32;
+      opacity: 0.6;
+    }
+
+    li.comprado .nome {
+      text-decoration: line-through;
+    }
+
+    .item-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    input[type="checkbox"] {
+      width: 26px;
+      height: 26px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info .nome {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .info .detalhes {
+      display: flex;
+      gap: 12px;
+      font-size: 14px;
+    }
+
+    .badge-casa { color: var(--text-muted); }
+    .badge-comprar { color: var(--accent); font-weight: bold; }
+
+    .btn-delete {
+      background: none;
+      color: var(--danger);
+      font-size: 24px;
+      padding: 0 10px;
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 20px;
+      font-style: italic;
+      font-size: 16px;
+    }
+
+    /* SEÇÃO 3: FINALIZAÇÃO DA COMPRA */
+    .finish-box {
+      background: #1a2510;
+      border: 1px solid #2e7d32;
+      margin-top: 25px;
+    }
+
+    .btn-finish {
+      width: 100%;
+      background-color: var(--primary);
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛒 Lista de Mercado</h1>
+
+  <!-- 1. BLOCO DE CADASTRO (EM CASA) -->
+  <div class="section-box" style="border-color: #1e88e5;">
+    <div class="section-title title-plan">📝 1. Adicionar / Alterar Item</div>
+    <form id="form-item">
+      <div class="input-wrapper">
+        <label for="nome">Nome do Produto</label>
+        <input type="text" id="nome" placeholder="Ex: Arroz" required>
+      </div>
+
+      <div class="form-group">
+        <div class="input-wrapper">
+          <label for="tenho">Tenho em Casa</label>
+          <input type="number" id="tenho" min="0" value="0">
+        </div>
+
+        <div class="input-wrapper">
+          <label for="comprar">Preciso Comprar</label>
+          <input type="number" id="comprar" min="0" value="1" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-add">Salvar na Lista</button>
+    </form>
+  </div>
+
+  <!-- 2. BLOCO DE VISUALIZAÇÃO (NO MERCADO) -->
+  <div class="section-title title-shop">🛒 2. Modos de Visualização</div>
+  <div class="tabs-container">
+    <div class="tabs-row">
+      <button class="tab-btn active" id="tab-comprar" onclick="mudarAba('comprar')">🛒 Falta Pegar</button>
+      <button class="tab-btn" id="tab-carrinho" onclick="mudarAba('carrinho')">✅ Já Peguei</button>
+    </div>
+    <button class="tab-btn" id="tab-todos" onclick="mudarAba('todos')">🏠 Ver Cadastro Completo</button>
+  </div>
+
+  <!-- Lista de Produtos -->
+  <ul id="lista-compras"></ul>
+
+  <!-- 3. BLOCO DE CONCLUSÃO (POS-COMPRA) -->
+  <div class="section-box finish-box">
+    <div class="section-title title-finish">🏁 3. Terminou as Compras?</div>
+    <p style="font-size: 14px; color: var(--text-muted); margin-top: 0; margin-bottom: 12px;">
+      Clique abaixo para somar o que você comprou ao estoque de casa e zerar a lista.
+    </p>
+    <button id="btn-finalizar" class="btn-finish" onclick="finalizarCompra()">
+      Atualizar Estoque de Casa
+    </button>
+  </div>
+
+  <script>
+    const form = document.getElementById('form-item');
+    const listaUI = document.getElementById('lista-compras');
+
+    let produtos = JSON.parse(localStorage.getItem('lista_compras_db')) || [];
+    let abaAtual = 'comprar';
+
+    function salvarERenderizar() {
+      localStorage.setItem('lista_compras_db', JSON.stringify(produtos));
+      renderizarLista();
+    }
+
+    // Função de alteração e recolhimento (toggle) das abas
+    function mudarAba(abaDesejada) {
+      // Se a aba 'todos' já estiver ativa e o usuário clicar nela de novo,
+      // ele recolhe e volta para a aba principal 'comprar'
+      if (abaAtual === 'todos' && abaDesejada === 'todos') {
+        abaAtual = 'comprar';
+      } else {
+        abaAtual = abaDesejada;
+      }
+
+      // Atualiza o estado visual dos botões
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(`tab-${abaAtual}`).classList.add('active');
+
+      renderizarLista();
+    }
+
+    function renderizarLista() {
+      listaUI.innerHTML = '';
+
+      const produtosFiltrados = produtos.filter(prod => {
+        if (abaAtual === 'comprar') return prod.comprar > 0 && !prod.noCarrinho;
+        if (abaAtual === 'carrinho') return prod.noCarrinho;
+        return true; // aba 'todos'
+      });
+
+      if (produtosFiltrados.length === 0) {
+        let mensagem = 'Nenhum item nesta lista.';
+        if (abaAtual === 'comprar') mensagem = '🎉 Excelente! Não há itens pendentes para pegar.';
+        if (abaAtual === 'carrinho') mensagem = '🛒 Nenhum item colocado no carrinho ainda.';
+        
+        listaUI.innerHTML = `<li class="empty-msg">${mensagem}</li>`;
+        return;
+      }
+
+      produtosFiltrados.forEach((prod) => {
+        const indexReal = produtos.findIndex(p => p.nome === prod.nome);
+        const li = document.createElement('li');
+        if (prod.noCarrinho) li.classList.add('comprado');
+
+        li.innerHTML = `
+          <div class="item-left">
+            <input type="checkbox" ${prod.noCarrinho ? 'checked' : ''} onchange="toggleCheck(${indexReal})">
+            <div class="info">
+              <span class="nome">${prod.nome}</span>
+              <div class="detalhes">
+                <span class="badge badge-casa">🏠 Em casa: <strong>${prod.tenho}</strong></span>
+                <span class="badge badge-comprar">🛒 Comprar: <strong>${prod.comprar}</strong></span>
+              </div>
+            </div>
+          </div>
+          <button class="btn-delete" onclick="removerItem(${indexReal})" title="Excluir produto">&times;</button>
+        `;
+
+        listaUI.appendChild(li);
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nomeInput = document.getElementById('nome').value.trim();
+      const tenhoInput = Number(document.getElementById('tenho').value);
+      const comprarInput = Number(document.getElementById('comprar').value);
+
+      const indexExistente = produtos.findIndex(p => p.nome.toLowerCase() === nomeInput.toLowerCase());
+
+      if (indexExistente !== -1) {
+        produtos[indexExistente].tenho = tenhoInput;
+        produtos[indexExistente].comprar = comprarInput;
+      } else {
+        produtos.push({
+          nome: nomeInput,
+          tenho: tenhoInput,
+          comprar: comprarInput,
+          noCarrinho: false
+        });
+      }
+
+      salvarERenderizar();
+      form.reset();
+      document.getElementById('tenho').value = 0;
+      document.getElementById('comprar').value = 1;
+    });
+
+    window.toggleCheck = function(index) {
+      produtos[index].noCarrinho = !produtos[index].noCarrinho;
+      salvarERenderizar();
+    };
+
+    window.removerItem = function(index) {
+      produtos.splice(index, 1);
+      salvarERenderizar();
+    };
+
+    window.finalizarCompra = function() {
+      let alterou = false;
+
+      produtos.forEach(prod => {
+        if (prod.noCarrinho) {
+          prod.tenho += prod.comprar;
+          prod.comprar = 0;
+          prod.noCarrinho = false;
+          alterou = true;
+        }
+      });
+
+      if (alterou) {
+        salvarERenderizar();
+        alert('Estoque atualizado com sucesso! O que você comprou agora está somado no seu estoque de casa.');
+      } else {
+        alert('Marque pelo menos um produto com "check" antes de finalizar.');
+      }
+    };
+
+    renderizarLista();
+  </script>
+</body>
+</html>
