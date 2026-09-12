@@ -1,8 +1,14 @@
-# 🛒 Lista de Mercado Inteligente (`listadosupermercado`)
+# 🛒 Lista de Mercado Fácil
 
 Uma aplicação web simples, acessível e funcional desenvolvida em **HTML5, CSS3 e JavaScript puro (Vanilla JS)** focada na praticidade para gerenciamento de estoque doméstico e controle de compras de supermercado.
 
 O projeto foi desenhado focando em **Experiência do Usuário (UX) e Acessibilidade**, com atenção especial a facilidades de leitura e uso por pessoas de idade mais avançada.
+
+🔗 **Links do Projeto:**
+* 🌐 **Testar Aplicação (GitHub Pages):** [https://renepadua.github.io/listadosupermercado/](https://renepadua.github.io/listadosupermercado/)
+* 📦 **Repositório do Código (GitHub):** [https://github.com/RenePadua/listadosupermercado](https://github.com/RenePadua/listadosupermercado)
+
+---
 
 ---
 
