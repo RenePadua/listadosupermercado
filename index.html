@@ -15,6 +15,7 @@
       --border: #333333;
       --danger: #ef5350;
       --accent: #64b5f6;
+      --whatsapp: #25d366;
     }
 
     *, *::before, *::after {
@@ -77,6 +78,7 @@
     .title-plan { color: var(--accent); }
     .title-shop { color: var(--primary); margin-bottom: 12px; }
     .title-finish { color: #ffca28; margin-bottom: 12px; }
+    .title-backup { color: var(--whatsapp); }
 
     .collapsible-content {
       margin-top: 12px;
@@ -114,7 +116,7 @@
       font-weight: bold;
     }
 
-    input[type="text"], input[type="number"] {
+    input[type="text"], input[type="number"], textarea {
       background-color: var(--input-bg);
       color: var(--text);
       border: 1px solid var(--border);
@@ -122,10 +124,16 @@
       border-radius: 6px;
       font-size: 16px;
       width: 100%;
+      font-family: inherit;
     }
 
     input[type="text"] {
       text-transform: uppercase;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
     }
 
     button {
@@ -141,6 +149,21 @@
     .btn-add {
       background-color: #2196f3;
       color: #fff;
+    }
+
+    .btn-whatsapp {
+      background-color: var(--whatsapp);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-import {
+      background-color: #7e57c2;
+      color: #fff;
+      margin-top: 8px;
     }
 
     /* SEÇÃO 2: ABAS DE NAVEGAÇÃO */
@@ -189,10 +212,10 @@
     }
 
     li {
-      position: relative; /* Define o referencial para o posicionamento absoluto dos botões */
+      position: relative;
       background: var(--input-bg);
       border: 1px solid var(--border);
-      padding: 12px 45px 12px 12px; /* Garante margem à direita para não cobrir os botões */
+      padding: 12px 45px 12px 12px;
       border-radius: 8px;
       margin-bottom: 10px;
       display: flex;
@@ -227,7 +250,6 @@
       min-width: 0;
     }
 
-    /* BOTÕES DISTRIBUÍDOS DE PONTA A PONTA NA ALTURA DO LI */
     .action-buttons {
       position: absolute;
       top: 8px;
@@ -301,7 +323,6 @@
       font-size: 16px;
     }
 
-    /* SEÇÃO 3: FINALIZAÇÃO DA COMPRA */
     .finish-box {
       background: #1a2510;
       border: 1px solid #2e7d32;
@@ -312,6 +333,19 @@
       width: 100%;
       background-color: var(--primary);
       color: #000;
+    }
+
+    .backup-box {
+      background: #0f2419;
+      border: 1px solid #1b5e20;
+    }
+
+    .help-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 0;
+      margin-bottom: 12px;
+      line-height: 1.4;
     }
 
     /* RESPONSIVIDADE MOBILE */
@@ -391,12 +425,39 @@
   <!-- 3. BLOCO DE CONCLUSÃO (PÓS-COMPRA) -->
   <div class="section-box finish-box">
     <div class="section-title title-finish">🏁 3. Terminou as Compras?</div>
-    <p style="font-size: 14px; color: var(--text-muted); margin-top: 0; margin-bottom: 12px;">
+    <p class="help-text">
       Clique abaixo para somar o que você comprou ao estoque de casa e zerar a lista.
     </p>
     <button id="btn-finalizar" class="btn-finish" onclick="finalizarCompra()">
       Atualizar Estoque de Casa
     </button>
+  </div>
+
+  <!-- 4. BLOCO DE EXPORTAR E IMPORTAR VIA WHATSAPP (RECOLHÍVEL) -->
+  <div class="section-box backup-box">
+    <div class="section-title title-backup title-toggle" onclick="toggleBackup()">
+      <span>📱 4. Backup da Lista - Enviar ou Receber do WhatsApp</span>
+      <span class="arrow-icon" id="backup-arrow">▼</span>
+    </div>
+    
+    <div class="collapsible-content collapsed" id="backup-container">
+      <p class="help-text">
+        <strong>Enviar:</strong> Clique no botão verde abaixo para enviar sua lista atual por conversa no WhatsApp.<br>
+        <strong>Restaurar:</strong> Copie a mensagem recebida do WhatsApp, cole na caixa abaixo e clique em "Carregar Lista".
+      </p>
+
+      <button class="btn-whatsapp" onclick="exportarParaWhatsApp()">
+        📲 Compartilhar Lista no WhatsApp
+      </button>
+
+      <div style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px;">
+        <label for="txt-importar" style="font-size: 14px; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 6px;">
+          Cole a mensagem do WhatsApp aqui para carregar:
+        </label>
+        <textarea id="txt-importar" placeholder="Cole aqui a mensagem inteira do WhatsApp..."></textarea>
+        <button class="btn-import" onclick="importarDoTexto()">📥 Carregar Lista Copiada</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -443,6 +504,13 @@
         const estaEscondido = container.classList.toggle('collapsed');
         arrow.textContent = estaEscondido ? '▼' : '▲';
       }
+    }
+
+    function toggleBackup() {
+      const container = document.getElementById('backup-container');
+      const arrow = document.getElementById('backup-arrow');
+      const estaEscondido = container.classList.toggle('collapsed');
+      arrow.textContent = estaEscondido ? '▼' : '▲';
     }
 
     function salvarERenderizar() {
@@ -593,6 +661,65 @@
         alert('Estoque atualizado com sucesso! O que você comprou agora está somado no seu estoque de casa.');
       } else {
         alert('Marque pelo menos um produto com "check" antes de finalizar.');
+      }
+    };
+
+    /* FUNÇÕES DE INTEGRAÇÃO COM WHATSAPP */
+    window.exportarParaWhatsApp = function() {
+      if (produtos.length === 0) {
+        alert('Sua lista está vazia! Adicione alguns produtos antes de enviar.');
+        return;
+      }
+
+      let texto = `🛒 *MINHA LISTA DE MERCADO*\n\n`;
+
+      const paraComprar = produtos.filter(p => p.comprar > 0);
+      if (paraComprar.length > 0) {
+        texto += `*ITENS PARA COMPRAR:*\n`;
+        paraComprar.forEach(p => {
+          texto += `• ${p.nome} - Qtd: ${p.comprar}\n`;
+        });
+        texto += `\n`;
+      }
+
+      texto += `--- CÓDIGO DA LISTA (NÃO APAGUE) ---\n`;
+      const jsonBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(produtos))));
+      texto += `#LISTA:${jsonBase64}#`;
+
+      const linkWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(texto)}`;
+      window.open(linkWhatsApp, '_blank');
+    };
+
+    window.importarDoTexto = function() {
+      const entrada = document.getElementById('txt-importar').value;
+
+      if (!entrada.trim()) {
+        alert('Por favor, cole primeiro a mensagem do WhatsApp no campo indicado.');
+        return;
+      }
+
+      try {
+        const match = entrada.match(/#LISTA:(.*?)#/);
+        if (!match || !match[1]) {
+          throw new Error('Código de lista não encontrado');
+        }
+
+        const jsonString = decodeURIComponent(escape(atob(match[1])));
+        const novosProdutos = JSON.parse(jsonString);
+
+        if (Array.isArray(novosProdutos)) {
+          const confirmou = confirm('Isso vai atualizar sua lista com os dados do WhatsApp. Deseja continuar?');
+          if (confirmou) {
+            produtos = novosProdutos;
+            salvarERenderizar();
+            document.getElementById('txt-importar').value = '';
+            alert('🎉 Lista carregada com sucesso!');
+          }
+        } else {
+          throw new Error('Formato inválido');
+        }
+      } catch (err) {
+        alert('Não foi possível ler a lista desse texto. Certifique-se de que copiou a mensagem inteira do WhatsApp, incluindo as linhas finais.');
       }
     };
 
