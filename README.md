@@ -1,6 +1,6 @@
 # 🛒 Lista de Mercado Inteligente (`listadosupermercado`)
 
-Uma aplicação web simples, acessível e funcional desenvolvida em **HTML5, CSS3 e JavaScript puro (Vanilla JS)** para gerenciamento de estoque doméstico e controle de compras de supermercado.
+Uma aplicação web simples, acessível e funcional desenvolvida em **HTML5, CSS3 e JavaScript puro (Vanilla JS)** focada na praticidade para gerenciamento de estoque doméstico e controle de compras de supermercado.
 
 O projeto foi desenhado focando em **Experiência do Usuário (UX) e Acessibilidade**, com atenção especial a facilidades de leitura e uso por pessoas de idade mais avançada.
 
@@ -8,14 +8,29 @@ O projeto foi desenhado focando em **Experiência do Usuário (UX) e Acessibilid
 
 ## 🌟 Principais Funcionalidades
 
-- **💾 Armazenamento Local (`localStorage`):** Os dados da lista são salvos no próprio navegador. Você não perde suas informações mesmo se fechar a página.
-- **🏠 Gestão de Estoque Doméstico:** Permite registrar o que você já tem em casa e controlar a quantidade exata que precisa comprar.
-- **🔄 Ciclo de Reutilização de Produtos:** Ao terminar as compras, os itens marcados são somados ao estoque de casa automaticamente e zerados da lista de compras sem necessidade de recadastrar o item.
-- **👁️ Visualização por Etapas:**
-  1. **📝 Planejamento:** Formulário para adicionar ou atualizar produtos.
-  2. **🛒 No Mercado:** Alternância de abas para focar apenas no que **Falta Pegar** e no que **Já Pegou**.
-  3. **🏁 Finalização:** Botão exclusivo para atualização de estoque pós-compra.
-- **♿ Foco em Acessibilidade e UX:**
-  - Modo escuro por padrão (menor cansaço visual).
-  - Textos e botões em tamanhos ampliados.
-  - Abas inteligentes com efeito de recolhimento (*toggle*) para não poluir a tela.
+1. **Gestão Inteligente de Estoque:**
+   * Controle de quantidade mantida em casa vs. quantidade a comprar.
+   * Ao finalizar as compras, os itens adquiridos somam automaticamente ao estoque de casa e a lista é zerada.
+
+2. **Navegação Simples (Foco em Usabilidade/Acessibilidade):**
+   * Fontes grandes, contraste elevado (Modo Escuro) e botões de toque generosos.
+   * **Modos de Visualização:**
+     * 🛒 *Falta Pegar:* Itens pendentes de compra.
+     * ✅ *Já Peguei:* Itens marcados no carrinho durante o mercado.
+     * 🏠 *Ver lista completa:* Visão geral do cadastro.
+   * Seções colapsáveis (Cards recolhíveis) para economizar espaço e evitar poluição visual.
+
+3. **Backup e Compartilhamento via WhatsApp (Zero Custo / 100% Client-Side):**
+   * **Exportar:** Transforma toda a lista em um código codificado (Base64) e abre no WhatsApp para envio a si mesmo ou familiares/cuidadores.
+   * **Importar/Restaurar:** Permite colar o texto recebido do WhatsApp para carregar e sincronizar a lista inteira instantaneamente.
+   * Funciona sem necessidade de banco de dados externo ou servidor.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* **HTML5:** Estruturação semântica.
+* **CSS3:** Layout responsivo (Flexbox), CSS Variables para temas e Dark Mode nativo.
+* **JavaScript (Vanilla):** Lógica da aplicação, manipulação do DOM e persistência de dados.
+* **LocalStorage:** Armazenamento local no navegador do dispositivo.
+* **WhatsApp Deep Links (Web Intent):** Integração com o WhatsApp para compartilhamento sem dependência de APIs pagas.
