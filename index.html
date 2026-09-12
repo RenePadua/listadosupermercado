@@ -17,6 +17,10 @@
       --accent: #64b5f6;
     }
 
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: system-ui, -apple-system, sans-serif;
       background-color: var(--bg);
@@ -34,13 +38,14 @@
       margin-bottom: 20px;
     }
 
-    /* SEÇÃO 1: FORMULÁRIO DE PLANEJAMENTO */
+    /* CARDS DE SEÇÃO */
     .section-box {
       background: var(--card-bg);
       padding: 15px;
       border-radius: 10px;
       border: 1px solid var(--border);
       margin-bottom: 25px;
+      width: 100%;
     }
 
     .section-title {
@@ -48,25 +53,51 @@
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 12px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 8px;
     }
 
+    .title-toggle {
+      cursor: pointer;
+      user-select: none;
+      padding: 4px 0;
+    }
+
+    .title-toggle:hover {
+      opacity: 0.8;
+    }
+
+    .arrow-icon {
+      font-size: 12px;
+      transition: transform 0.2s ease;
+    }
+
     .title-plan { color: var(--accent); }
-    .title-shop { color: var(--primary); }
-    .title-finish { color: #ffca28; }
+    .title-shop { color: var(--primary); margin-bottom: 12px; }
+    .title-finish { color: #ffca28; margin-bottom: 12px; }
+
+    .collapsible-content {
+      margin-top: 12px;
+      display: block;
+    }
+
+    .collapsible-content.collapsed {
+      display: none;
+    }
 
     form {
       display: flex;
       flex-direction: column;
       gap: 12px;
+      width: 100%;
     }
 
     .form-group {
       display: flex;
       gap: 10px;
+      width: 100%;
     }
 
     .input-wrapper {
@@ -74,6 +105,7 @@
       flex-direction: column;
       gap: 6px;
       flex: 1;
+      min-width: 0;
     }
 
     .input-wrapper label {
@@ -89,6 +121,11 @@
       padding: 12px;
       border-radius: 6px;
       font-size: 16px;
+      width: 100%;
+    }
+
+    input[type="text"] {
+      text-transform: uppercase;
     }
 
     button {
@@ -98,6 +135,7 @@
       font-weight: bold;
       font-size: 16px;
       cursor: pointer;
+      width: 100%;
     }
 
     .btn-add {
@@ -105,7 +143,7 @@
       color: #fff;
     }
 
-    /* SEÇÃO 2: ABAS DE MODO DE VISÃO */
+    /* SEÇÃO 2: ABAS DE NAVEGAÇÃO */
     .tabs-container {
       display: flex;
       flex-direction: column;
@@ -135,7 +173,15 @@
       font-weight: bold;
     }
 
-    /* LISTA DE PRODUTOS */
+    /* CARD EXCLUSIVO PARA A LISTA */
+    .list-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 25px;
+    }
+
     ul {
       list-style: none;
       padding: 0;
@@ -143,14 +189,19 @@
     }
 
     li {
-      background: var(--card-bg);
+      position: relative; /* Define o referencial para o posicionamento absoluto dos botões */
+      background: var(--input-bg);
       border: 1px solid var(--border);
-      padding: 15px;
+      padding: 12px 45px 12px 12px; /* Garante margem à direita para não cobrir os botões */
       border-radius: 8px;
       margin-bottom: 10px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    li:last-child {
+      margin-bottom: 0;
     }
 
     li.comprado {
@@ -162,10 +213,31 @@
       text-decoration: line-through;
     }
 
-    .item-left {
+    .item-header {
       display: flex;
       align-items: center;
-      gap: 15px;
+      width: 100%;
+    }
+
+    .item-title-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* BOTÕES DISTRIBUÍDOS DE PONTA A PONTA NA ALTURA DO LI */
+    .action-buttons {
+      position: absolute;
+      top: 8px;
+      bottom: 8px;
+      right: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      width: 32px;
     }
 
     input[type="checkbox"] {
@@ -173,34 +245,53 @@
       height: 26px;
       accent-color: var(--primary);
       cursor: pointer;
+      flex-shrink: 0;
     }
 
-    .info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    input[type="checkbox"]:disabled {
+      cursor: not-allowed;
+      opacity: 0.3;
     }
 
-    .info .nome {
+    .nome {
       font-weight: bold;
       font-size: 18px;
+      text-transform: uppercase;
+      word-break: break-word;
     }
 
-    .info .detalhes {
+    .btn-action {
+      background: none;
+      padding: 4px;
+      width: 100%;
+      border-radius: 4px;
+      line-height: 1;
       display: flex;
-      gap: 12px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-edit {
+      color: var(--accent);
+      font-size: 16px;
+    }
+
+    .btn-delete {
+      color: var(--danger);
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .detalhes {
+      display: flex;
+      gap: 15px;
       font-size: 14px;
+      padding-left: 38px;
+      flex-wrap: wrap;
     }
 
     .badge-casa { color: var(--text-muted); }
     .badge-comprar { color: var(--accent); font-weight: bold; }
-
-    .btn-delete {
-      background: none;
-      color: var(--danger);
-      font-size: 24px;
-      padding: 0 10px;
-    }
 
     .empty-msg {
       text-align: center;
@@ -222,51 +313,82 @@
       background-color: var(--primary);
       color: #000;
     }
+
+    /* RESPONSIVIDADE MOBILE */
+    @media (max-width: 480px) {
+      body {
+        padding: 0 10px;
+        margin: 10px auto;
+      }
+
+      .form-group {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .tabs-row {
+        flex-direction: column;
+      }
+
+      .detalhes {
+        flex-direction: column;
+        gap: 4px;
+        padding-left: 0;
+      }
+    }
   </style>
 </head>
 <body>
 
   <h1>🛒 Lista de Mercado</h1>
 
-  <!-- 1. BLOCO DE CADASTRO (EM CASA) -->
-  <div class="section-box" style="border-color: #1e88e5;">
-    <div class="section-title title-plan">📝 1. Adicionar / Alterar Item</div>
-    <form id="form-item">
-      <div class="input-wrapper">
-        <label for="nome">Nome do Produto</label>
-        <input type="text" id="nome" placeholder="Ex: Arroz" required>
-      </div>
-
-      <div class="form-group">
+  <!-- 1. BLOCO DE CADASTRO (EXPANSÍVEL) -->
+  <div class="section-box" id="box-formulario" style="border-color: #1e88e5;">
+    <div class="section-title title-plan title-toggle" onclick="toggleFormulario()">
+      <span>📝 1. Adicionar / Alterar Item</span>
+      <span class="arrow-icon" id="form-arrow">▲</span>
+    </div>
+    
+    <div class="collapsible-content" id="form-container">
+      <form id="form-item">
         <div class="input-wrapper">
-          <label for="tenho">Tenho em Casa</label>
-          <input type="number" id="tenho" min="0" value="0">
+          <label for="nome">Nome do Produto</label>
+          <input type="text" id="nome" placeholder="Ex: DESODORANTE" required>
         </div>
 
-        <div class="input-wrapper">
-          <label for="comprar">Preciso Comprar</label>
-          <input type="number" id="comprar" min="0" value="1" required>
-        </div>
-      </div>
+        <div class="form-group">
+          <div class="input-wrapper">
+            <label for="tenho">Tenho em Casa</label>
+            <input type="number" id="tenho" min="0" value="0">
+          </div>
 
-      <button type="submit" class="btn-add">Salvar na Lista</button>
-    </form>
+          <div class="input-wrapper">
+            <label for="comprar">Preciso Comprar</label>
+            <input type="number" id="comprar" min="0" value="1" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-add">Salvar na Lista</button>
+      </form>
+    </div>
   </div>
 
-  <!-- 2. BLOCO DE VISUALIZAÇÃO (NO MERCADO) -->
+  <!-- 2. NAVEGAÇÃO POR ABAS -->
   <div class="section-title title-shop">🛒 2. Modos de Visualização</div>
   <div class="tabs-container">
     <div class="tabs-row">
       <button class="tab-btn active" id="tab-comprar" onclick="mudarAba('comprar')">🛒 Falta Pegar</button>
       <button class="tab-btn" id="tab-carrinho" onclick="mudarAba('carrinho')">✅ Já Peguei</button>
     </div>
-    <button class="tab-btn" id="tab-todos" onclick="mudarAba('todos')">🏠 Ver Cadastro Completo</button>
+    <button class="tab-btn" id="tab-todos" onclick="mudarAba('todos')">🏠 Ver lista completa de produtos</button>
   </div>
 
-  <!-- Lista de Produtos -->
-  <ul id="lista-compras"></ul>
+  <!-- CARD EXCLUSIVO PARA A LISTA -->
+  <div class="list-card">
+    <ul id="lista-compras"></ul>
+  </div>
 
-  <!-- 3. BLOCO DE CONCLUSÃO (POS-COMPRA) -->
+  <!-- 3. BLOCO DE CONCLUSÃO (PÓS-COMPRA) -->
   <div class="section-box finish-box">
     <div class="section-title title-finish">🏁 3. Terminou as Compras?</div>
     <p style="font-size: 14px; color: var(--text-muted); margin-top: 0; margin-bottom: 12px;">
@@ -284,22 +406,57 @@
     let produtos = JSON.parse(localStorage.getItem('lista_compras_db')) || [];
     let abaAtual = 'comprar';
 
+    function padronizarProdutosAntigos() {
+      const produtosUnicos = [];
+
+      produtos.forEach(item => {
+        const nomeFormatado = item.nome.trim().toUpperCase();
+        const indexExistente = produtosUnicos.findIndex(p => p.nome === nomeFormatado);
+
+        if (indexExistente !== -1) {
+          produtosUnicos[indexExistente].tenho = Math.max(produtosUnicos[indexExistente].tenho, item.tenho);
+          produtosUnicos[indexExistente].comprar = Math.max(produtosUnicos[indexExistente].comprar, item.comprar);
+          if (item.noCarrinho && produtosUnicos[indexExistente].comprar > 0) {
+            produtosUnicos[indexExistente].noCarrinho = true;
+          }
+        } else {
+          produtosUnicos.push({
+            ...item,
+            nome: nomeFormatado,
+            noCarrinho: item.comprar > 0 ? Boolean(item.noCarrinho) : false
+          });
+        }
+      });
+
+      produtos = produtosUnicos;
+      localStorage.setItem('lista_compras_db', JSON.stringify(produtos));
+    }
+
+    function toggleFormulario(abrirForcado = false) {
+      const container = document.getElementById('form-container');
+      const arrow = document.getElementById('form-arrow');
+      
+      if (abrirForcado) {
+        container.classList.remove('collapsed');
+        arrow.textContent = '▲';
+      } else {
+        const estaEscondido = container.classList.toggle('collapsed');
+        arrow.textContent = estaEscondido ? '▼' : '▲';
+      }
+    }
+
     function salvarERenderizar() {
       localStorage.setItem('lista_compras_db', JSON.stringify(produtos));
       renderizarLista();
     }
 
-    // Função de alteração e recolhimento (toggle) das abas
     function mudarAba(abaDesejada) {
-      // Se a aba 'todos' já estiver ativa e o usuário clicar nela de novo,
-      // ele recolhe e volta para a aba principal 'comprar'
       if (abaAtual === 'todos' && abaDesejada === 'todos') {
         abaAtual = 'comprar';
       } else {
         abaAtual = abaDesejada;
       }
 
-      // Atualiza o estado visual dos botões
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById(`tab-${abaAtual}`).classList.add('active');
 
@@ -311,36 +468,46 @@
 
       const produtosFiltrados = produtos.filter(prod => {
         if (abaAtual === 'comprar') return prod.comprar > 0 && !prod.noCarrinho;
-        if (abaAtual === 'carrinho') return prod.noCarrinho;
-        return true; // aba 'todos'
+        if (abaAtual === 'carrinho') return prod.noCarrinho && prod.comprar > 0;
+        return true;
       });
+
+      produtosFiltrados.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
 
       if (produtosFiltrados.length === 0) {
         let mensagem = 'Nenhum item nesta lista.';
         if (abaAtual === 'comprar') mensagem = '🎉 Excelente! Não há itens pendentes para pegar.';
         if (abaAtual === 'carrinho') mensagem = '🛒 Nenhum item colocado no carrinho ainda.';
         
-        listaUI.innerHTML = `<li class="empty-msg">${mensagem}</li>`;
+        listaUI.innerHTML = `<li class="empty-msg" style="padding-right: 0;">${mensagem}</li>`;
         return;
       }
 
       produtosFiltrados.forEach((prod) => {
-        const indexReal = produtos.findIndex(p => p.nome === prod.nome);
+        const indexReal = produtos.findIndex(p => p.nome.toUpperCase() === prod.nome.toUpperCase());
         const li = document.createElement('li');
-        if (prod.noCarrinho) li.classList.add('comprado');
+        
+        const podeComprar = prod.comprar > 0;
+        if (prod.noCarrinho && podeComprar) li.classList.add('comprado');
 
         li.innerHTML = `
-          <div class="item-left">
-            <input type="checkbox" ${prod.noCarrinho ? 'checked' : ''} onchange="toggleCheck(${indexReal})">
-            <div class="info">
+          <div class="item-header">
+            <div class="item-title-wrapper">
+              <input type="checkbox" 
+                ${prod.noCarrinho && podeComprar ? 'checked' : ''} 
+                ${!podeComprar ? 'disabled title="Ajuste a quantidade em \'Preciso Comprar\' para poder marcar"' : ''} 
+                onchange="toggleCheck(${indexReal})">
               <span class="nome">${prod.nome}</span>
-              <div class="detalhes">
-                <span class="badge badge-casa">🏠 Em casa: <strong>${prod.tenho}</strong></span>
-                <span class="badge badge-comprar">🛒 Comprar: <strong>${prod.comprar}</strong></span>
-              </div>
             </div>
           </div>
-          <button class="btn-delete" onclick="removerItem(${indexReal})" title="Excluir produto">&times;</button>
+          <div class="detalhes">
+            <span class="badge badge-casa">🏠 Em casa: <strong>${prod.tenho}</strong></span>
+            <span class="badge badge-comprar">🛒 Comprar: <strong>${prod.comprar}</strong></span>
+          </div>
+          <div class="action-buttons">
+            <button class="btn-action btn-edit" onclick="editarItem(${indexReal})" title="Editar produto">✏️</button>
+            <button class="btn-action btn-delete" onclick="removerItem(${indexReal})" title="Excluir produto">&times;</button>
+          </div>
         `;
 
         listaUI.appendChild(li);
@@ -349,15 +516,21 @@
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const nomeInput = document.getElementById('nome').value.trim();
+      
+      const nomeInput = document.getElementById('nome').value.trim().toUpperCase();
       const tenhoInput = Number(document.getElementById('tenho').value);
       const comprarInput = Number(document.getElementById('comprar').value);
 
-      const indexExistente = produtos.findIndex(p => p.nome.toLowerCase() === nomeInput.toLowerCase());
+      const indexExistente = produtos.findIndex(p => p.nome.toUpperCase() === nomeInput);
 
       if (indexExistente !== -1) {
+        produtos[indexExistente].nome = nomeInput;
         produtos[indexExistente].tenho = tenhoInput;
         produtos[indexExistente].comprar = comprarInput;
+        
+        if (comprarInput === 0) {
+          produtos[indexExistente].noCarrinho = false;
+        }
       } else {
         produtos.push({
           nome: nomeInput,
@@ -373,21 +546,41 @@
       document.getElementById('comprar').value = 1;
     });
 
+    window.editarItem = function(index) {
+      const prod = produtos[index];
+      
+      document.getElementById('nome').value = prod.nome;
+      document.getElementById('tenho').value = prod.tenho;
+      document.getElementById('comprar').value = prod.comprar;
+
+      toggleFormulario(true);
+
+      document.getElementById('box-formulario').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('comprar').focus();
+    };
+
     window.toggleCheck = function(index) {
-      produtos[index].noCarrinho = !produtos[index].noCarrinho;
-      salvarERenderizar();
+      if (produtos[index].comprar > 0) {
+        produtos[index].noCarrinho = !produtos[index].noCarrinho;
+        salvarERenderizar();
+      }
     };
 
     window.removerItem = function(index) {
-      produtos.splice(index, 1);
-      salvarERenderizar();
+      const prod = produtos[index];
+      const confirmou = confirm(`Tem certeza que deseja excluir "${prod.nome}" da sua lista?`);
+      
+      if (confirmou) {
+        produtos.splice(index, 1);
+        salvarERenderizar();
+      }
     };
 
     window.finalizarCompra = function() {
       let alterou = false;
 
       produtos.forEach(prod => {
-        if (prod.noCarrinho) {
+        if (prod.noCarrinho && prod.comprar > 0) {
           prod.tenho += prod.comprar;
           prod.comprar = 0;
           prod.noCarrinho = false;
@@ -403,6 +596,7 @@
       }
     };
 
+    padronizarProdutosAntigos();
     renderizarLista();
   </script>
 </body>
