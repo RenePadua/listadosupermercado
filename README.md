@@ -10,8 +10,6 @@ O projeto foi desenhado focando em **Experiência do Usuário (UX) e Acessibilid
 
 ---
 
----
-
 ## 🌟 Principais Funcionalidades
 
 1. **Gestão Inteligente de Estoque:**
